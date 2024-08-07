@@ -3,7 +3,7 @@
  
 <!-- isi bagian judul halaman -->
 <!-- cara penulisan isi section yang pendek -->
-@section('judul_halaman', 'Halaman tentang')
+@section('judul_halaman', 'Halaman Tentang')
  
  
 <!-- isi bagian konten -->
@@ -12,10 +12,12 @@
  
 	<p>Ini Adalah Halaman Tentang</p>
 	<p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, iste ipsa qui recusandae quas ea quidem 
-        consectetur adipisci id tempora aut blanditiis officiis fugiat ipsum facere architecto temporibus aperiam tempore 
-        quam. Adipisci repellendus incidunt neque alias voluptatum id quibusdam laudantium optio laboriosam, in officia, vero soluta vitae consequatur cupiditate natus.
-
-    </p>
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+	</p>
  
 @endsection

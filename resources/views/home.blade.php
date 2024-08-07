@@ -3,7 +3,7 @@
  
 <!-- isi bagian judul halaman -->
 <!-- cara penulisan isi section yang pendek -->
-@section('judul_halaman', 'Halaman')
+@section('judul_halaman', 'Halaman Home')
  
  
 <!-- isi bagian konten -->
