@@ -1,11 +1,10 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB; // Tambahkan ini
+use Illuminate\Support\Facades\DB; // Tambahkan baris ini
 use Faker\Factory as Faker;
-
+ 
 class PegawaiSeeder extends Seeder
 {
     /**
@@ -15,17 +14,19 @@ class PegawaiSeeder extends Seeder
      */
     public function run()
     {
+        // data faker indonesia
         $faker = Faker::create('id_ID');
  
-    	for($i = 1; $i <= 15; $i++){
+        // membuat data dummy sebanyak 10 record
+        for($x = 1; $x <= 20; $x++){
  
-    	      // insert data ke table pegawai menggunakan Faker
-    		DB::table('pegawai')->insert([
-    			'pegawai_nama' => $faker->name,
-    			'pegawai_jabatan' => $faker->jobTitle,
-    			'pegawai_umur' => $faker->numberBetween(25,40),
-    			'pegawai_alamat' => $faker->address
-    		]);
+        	// insert data dummy pegawai dengan faker
+        	DB::table('pegawai')->insert([
+        		'nama' => $faker->name,
+        		'alamat' => $faker->address,
+        	]);
+ 
         }
+ 
     }
 }
