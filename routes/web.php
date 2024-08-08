@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\ContohValidController;
+
 
 
 Route::get('/', function () {
@@ -29,6 +31,14 @@ Route::post('/pegawai/store', [PegawaiController::class, 'store']);
 Route::get('/pegawai/edit/{id}',[PegawaiController::class, 'edit']);
 Route::post('/pegawai/update',[PegawaiController::class, 'update']);
 Route::get('/pegawai/hapus/{id}',[PegawaiController::class, 'hapus']);
+
+
+Route::get('/pegawai/cari',[PegawaiController::class, 'cari']);
+
+
+Route::get('/input', [ContohValidController::class, 'input']);
+ 
+Route::post('/proses', [ContohValidController::class, 'proses']);
 
 
 

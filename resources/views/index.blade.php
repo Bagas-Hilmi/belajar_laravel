@@ -1,40 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Tutorial Membuat CRUD Pada Laravel - www.malasngoding.com</title>
-</head>
+	<title>Tutorial Membuat Pencarian Pada Laravel - www.malasngoding.com</title>
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"></head>
 <body>
  
-	<h2>www.malasngoding.com</h2>
-	<h3>Data Pegawai</h3>
+	<div class="container">
+		<div class="card">
+			<div class="card-body">
+				
  
-	<a href="/pegawai/tambah"> + Tambah Pegawai Baru</a>
-	
-	<br/>
-	<br/>
+				<h2 class="text-center"><a href="https://www.malasngoding.com">CONTOH DATA KARYAWAN KIW</a></h2>
  
-	<table border="1">
-		<tr>
-			<th>Nama</th>
-			<th>Jabatan</th>
-			<th>Umur</th>
-			<th>Alamat</th>
-			<th>Opsi</th>
-		</tr>
-		@foreach($pegawai as $p)
-		<tr>
-			<td>{{ $p->pegawai_nama }}</td>
-			<td>{{ $p->pegawai_jabatan }}</td>
-			<td>{{ $p->pegawai_umur }}</td>
-			<td>{{ $p->pegawai_alamat }}</td>
-			<td>
-				<a href="/pegawai/edit/{{ $p->pegawai_id }}">Edit</a>
-				|
-				<a href="/pegawai/hapus/{{ $p->pegawai_id }}">Hapus</a>
-			</td>
-		</tr>
-		@endforeach
-	</table>
+				<h3>Data Pegawai</h3>
+ 
+				<p>Cari Data Pegawai :</p>
+ 
+				<div class="form-group">
+					
+				</div>
+				<form action="/pegawai/cari" method="GET" class="form-inline">
+					<input class="form-control" type="text" name="cari" placeholder="Cari Pegawai .." value="{{ old('cari') }}">
+					<input class="btn btn-primary ml-3" type="submit" value="CARI">
+				</form>
+ 
+				<br/>
+ 
+				<table class="table table-bordered">
+					<tr>
+						<th>Nama</th>
+						<th>Jabatan</th>
+						<th>Umur</th>
+						<th>Alamat</th>
+						<th>Opsi</th>
+					</tr>
+					@foreach($pegawai as $p)
+					<tr>
+						<td>{{ $p->pegawai_nama }}</td>
+						<td>{{ $p->pegawai_jabatan }}</td>
+						<td>{{ $p->pegawai_umur }}</td>
+						<td>{{ $p->pegawai_alamat }}</td>
+						<td>
+							<a class="btn btn-warning btn-sm" href="/pegawai/edit/{{ $p->pegawai_id }}">Edit</a>
+							<a class="btn btn-danger btn-sm" href="/pegawai/hapus/{{ $p->pegawai_id }}">Hapus</a>
+						</td>
+					</tr>
+					@endforeach
+				</table>
+ 
+				<br/>
+				Halaman : {{ $pegawai->currentPage() }} <br/>
+				Jumlah Data : {{ $pegawai->total() }} <br/>
+				Data Per Halaman : {{ $pegawai->perPage() }} <br/>
+				<br/>
+ 
+				{{ $pegawai->links() }}
+			</div>
+		</div>
+	</div>
  
  
 </body>
