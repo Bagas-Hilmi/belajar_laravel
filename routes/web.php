@@ -4,18 +4,24 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\BlogController;
 //use App\Http\Controllers\PegawaiController;
 //use App\Http\Controllers\ContohValidController;
-use App\Http\Controllers\GuruController;
+use App\Http\Controllers\PenggunaController;
+use App\Pengguna;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/guru', [GuruController::class, 'index']);
-Route::get('/guru/hapus/{id}', [GuruController::class, 'hapus']);
-Route::get('/guru/trash', [GuruController::class, 'trash']);
-Route::get('/guru/kembalikan/{id}',  [GuruController::class, 'kembalikan']);
-Route::get('/guru/kembalikan_semua', [GuruController::class, 'kembalikan_semua']);
-Route::get('/guru/hapus_permanen_semua', [GuruController::class, 'hapus_permanen_semua']);
+#Route::get('/guru', [GuruController::class, 'index']);
+#Route::get('/guru/hapus/{id}', [GuruController::class, 'hapus']);
+#Route::get('/guru/trash', [GuruController::class, 'trash']);
+#Route::get('/guru/kembalikan/{id}',  [GuruController::class, 'kembalikan']);
+#Route::get('/guru/kembalikan_semua', [GuruController::class, 'kembalikan_semua']);
+#Route::get('/guru/hapus_permanen_semua', [GuruController::class, 'hapus_permanen_semua']);
+
+
+
+
+Route::get('/pengguna', [PenggunaController::class, 'index']);
 
 //Route::get('halo', function () {
 	//return "Halo, Selamat datang di tutorial";
