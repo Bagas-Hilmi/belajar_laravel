@@ -4,12 +4,16 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\BlogController;
 //use App\Http\Controllers\PegawaiController;
 //use App\Http\Controllers\ContohValidController;
-use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\WebController;
 use App\Pengguna;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/article', [WebController::class, 'index']);
+
 
 #Route::get('/guru', [GuruController::class, 'index']);
 #Route::get('/guru/hapus/{id}', [GuruController::class, 'hapus']);
@@ -21,7 +25,7 @@ Route::get('/', function () {
 
 
 
-Route::get('/pengguna', [PenggunaController::class, 'index']);
+#Route::get('/pengguna', [PenggunaController::class, 'index']);
 
 //Route::get('halo', function () {
 	//return "Halo, Selamat datang di tutorial";
