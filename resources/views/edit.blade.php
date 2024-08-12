@@ -1,53 +1,37 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutorial Membuat CRUD Pada Laravel - www.malasngoding.com</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<title>Tutorial Membuat CRUD Pada Laravel - www.malasngoding.com</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-
-<div class="container mt-5">
-    <h2><a href="https://www.malasngoding.com">EDIT </a></h2>
-    <h3>Edit Pegawai</h3>
  
-    <a href="/pegawai" class="btn btn-primary mb-3">Kembali</a>
+	<h2><a href="https://www.malasngoding.com">www.malasngoding.com</a></h2>
+	<h3>Edit karyawan</h3>
  
-    @foreach($pegawai as $p)
-    <form action="/pegawai/update" method="post">
-        {{ csrf_field() }}
-        <input type="hidden" name="id" value="{{ $p->pegawai_id }}"> 
-        
-        <div class="form-group">
-            <label for="nama">Nama</label>
-            <input type="text" class="form-control" id="nama" required="required" name="nama" value="{{ $p->pegawai_nama }}">
-        </div>
-        
-        <div class="form-group">
-            <label for="jabatan">Jabatan</label>
-            <input type="text" class="form-control" id="jabatan" required="required" name="jabatan" value="{{ $p->pegawai_jabatan }}">
-        </div>
-        
-        <div class="form-group">
-            <label for="umur">Umur</label>
-            <input type="number" class="form-control" id="umur" required="required" name="umur" value="{{ $p->pegawai_umur }}">
-        </div>
-        
-        <div class="form-group">
-            <label for="alamat">Alamat</label>
-            <textarea class="form-control" id="alamat" required="required" name="alamat">{{ $p->pegawai_alamat }}</textarea>
-        </div>
-        
-        <button type="submit" class="btn btn-success">Simpan Data</button>
-    </form>
-    @endforeach
-</div>
-
-<!-- Bootstrap JS, Popper.js, and jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<a href="/karyawan"> Kembali</a>
+	
+	<br/>
+	<br/>
+ 
+	@foreach($karyawan as $p)
+	<form action="/karyawan/update" method="post">
+		{{ csrf_field() }}
+		<input type="hidden" name="id" value="{{ $p->karyawan_id }}"> 
+		<br/>
+		Nama <input type="text" required="required" name="nama" value="{{ $p->karyawan_nama }}"> <br/>
+		
+		Jabatan <input type="text" required="required" name="jabatan" value="{{ $p->karyawan_jabatan }}"> <br/>
+		
+		Umur <input type="number" required="required" name="umur" value="{{ $p->karyawan_umur }}"> <br/>
+		
+		Alamat <textarea required="required" name="alamat">{{ $p->karyawan_alamat }}</textarea> <br/>
+		
+		<input type="submit" value="Simpan Data">
+	</form>
+	@endforeach
+		
+ 
 </body>
 </html>
