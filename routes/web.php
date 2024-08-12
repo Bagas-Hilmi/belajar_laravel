@@ -9,6 +9,8 @@ use App\Http\Controllers\WebController;
 use App\Http\Controllers\DikiController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\KiwController;
+use App\Http\Controllers\UploadController;
 
 
 use App\Pengguna;
@@ -36,6 +38,11 @@ Route::get('/enkripsi', [AyoController::class, 'enkripsi']);
 
 Route::get('/data', [AyoController::class,'data']);
 Route::get('/data/{data_rahasia}', [AyoController::class,'data_proses']);
+Route::get('/hash', [KiwController::class,'hash']);
+
+
+Route::get('/upload', [UploadController::class,'upload']);
+Route::post('/upload/proses',[UploadController::class,'proses_upload']);
 
 
 #Route::get('/article', [WebController::class, 'index']);
