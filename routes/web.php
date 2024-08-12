@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\GuruController;
 use App\Http\Controllers\DosenController;
-use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\AyoController;
 //use App\Http\Controllers\ContohValidController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\DikiController;
@@ -32,7 +32,10 @@ Route::get('/karyawan/hapus/{id}',[KaryawanController::class, 'hapus']);
 Route::get('/anggota', [DikiController::class, 'index']);
 //Route::get('/dosen', [DosenController::class, 'index']);
 
+Route::get('/enkripsi', [AyoController::class, 'enkripsi']);
 
+Route::get('/data', [AyoController::class,'data']);
+Route::get('/data/{data_rahasia}', [AyoController::class,'data_proses']);
 
 
 #Route::get('/article', [WebController::class, 'index']);
