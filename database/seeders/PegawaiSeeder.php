@@ -23,7 +23,10 @@ class PegawaiSeeder extends Seeder
         	// insert data dummy pegawai dengan faker
         	DB::table('pegawai')->insert([
         		'nama' => $faker->name,
+                'email' => $faker->email,
         		'alamat' => $faker->address,
+        		'telepon' => $faker->phoneNumber,
+        		'pekerjaan' => 'karyawan',
         	]);
  
         }
