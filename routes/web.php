@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\UploadController;
 //use App\Http\Controllers\TesController;
 //use App\Http\Controllers\NotifController;
-use App\Http\Controllers\ResourceController;
+//use App\Http\Controllers\ResourceController;
+//use App\Http\Controllers\BagasngodingController;
+//use App\Http\Controllers\PegawaiController;
 
 
 
@@ -21,9 +23,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('tanks', ResourceController::class);
+//Route::resource('tanks', ResourceController::class);
 
- 
+//Route::get('/kirimemail', [BagasngodingController::class, 'index']);
+
+//Route::get('/pegawai', [PegawaiController::class, 'index']);
+//Route::get('/pegawai/cetak_pdf', [PegawaiController::class, 'index']);
+
+
+    
+//Route::get('generate-pdf', [App\Http\Controllers\PDFController::class, 'generatePDF']);
+
+//Route::get('halo/{nama}', [App\Http\Controllers\HaloController::class, 'halo']);
+//Route::get('halo', [App\Http\Controllers\HaloController::class, 'panggil']);
+
+
+
+
+Route::get('siswa', [App\Http\Controllers\SiswaController::class, 'index']);
+Route::get('/siswa/export_excel', [App\Http\Controllers\SiswaController::class,'export_excel']);
+Route::post('/siswa/import_excel', [App\Http\Controllers\SiswaController::class,'import_excel']);
+//Route::get('/siswa/hapus_permanen_semua',[App\Http\Controllers\SiswaController::class,'hapus_permanen_semua']);
+
 
 
 
@@ -67,7 +88,6 @@ Route::resource('tanks', ResourceController::class);
 #Route::get('/guru/trash', [GuruController::class, 'trash']);
 #Route::get('/guru/kembalikan/{id}',  [GuruController::class, 'kembalikan']);
 #Route::get('/guru/kembalikan_semua', [GuruController::class, 'kembalikan_semua']);
-#Route::get('/guru/hapus_permanen_semua', [GuruController::class, 'hapus_permanen_semua']);
 
 //Route::get('/pengguna', [PenggunaController::class, 'index']);
 
