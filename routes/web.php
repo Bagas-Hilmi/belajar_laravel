@@ -43,6 +43,18 @@ Route::get('/', function () {
 Route::get('siswa', [App\Http\Controllers\SiswaController::class, 'index']);
 Route::get('/siswa/export_excel', [App\Http\Controllers\SiswaController::class,'export_excel']);
 Route::post('/siswa/import_excel', [App\Http\Controllers\SiswaController::class,'import_excel']);
+Route::get('/siswa/trash', [App\Http\Controllers\SiswaController::class, 'trash']);
+Route::get('/siswa/hapus/{id}', [App\Http\Controllers\SiswaController::class,'hapus']);
+Route::get('/siswa/hapus_permanen/{id}', [App\Http\Controllers\SiswaController::class,'hapus_permanen']);
+Route::get('/siswa/kembalikan/{id}',  [App\Http\Controllers\SiswaController::class, 'kembalikan']);
+Route::get('/siswa/kembalikan_semua', [App\Http\Controllers\SiswaController::class, 'kembalikan_semua']);
+Route::get('/siswa/hapus_permanen_semua', [App\Http\Controllers\SiswaController::class, 'hapus_permanen_semua']);
+
+
+Route::get('book', [App\Http\Controllers\BookController::class, 'index']);
+Route::post('/book/import_excel', [App\Http\Controllers\BookController::class,'import_excel']);
+Route::get('/book/export_excel', [App\Http\Controllers\BookController::class,'export_excel']);
+
 //Route::get('/siswa/hapus_permanen_semua',[App\Http\Controllers\SiswaController::class,'hapus_permanen_semua']);
 
 
@@ -83,11 +95,6 @@ Route::post('/siswa/import_excel', [App\Http\Controllers\SiswaController::class,
 //Route::get('/article', [WebController::class, 'index']);
 
 
-#Route::get('/guru', [GuruController::class, 'index']);
-#Route::get('/guru/hapus/{id}', [GuruController::class, 'hapus']);
-#Route::get('/guru/trash', [GuruController::class, 'trash']);
-#Route::get('/guru/kembalikan/{id}',  [GuruController::class, 'kembalikan']);
-#Route::get('/guru/kembalikan_semua', [GuruController::class, 'kembalikan_semua']);
 
 //Route::get('/pengguna', [PenggunaController::class, 'index']);
 
