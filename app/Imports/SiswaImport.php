@@ -4,9 +4,11 @@ namespace App\Imports;
 
 use App\Models\Siswa;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\Importable;
 
 class SiswaImport implements ToModel
 {
+    use Importable;
     /**
     * @param array $row
     *

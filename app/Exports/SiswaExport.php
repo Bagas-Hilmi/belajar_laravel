@@ -1,17 +1,26 @@
 <?php
  
-namespace App\Exports;
+ namespace App\Exports;
+
+ use App\Models\Siswa;
+ use Maatwebsite\Excel\Concerns\FromCollection;
+ use Maatwebsite\Excel\Concerns\WithHeadings;
  
-use App\Models\Siswa;
-use Maatwebsite\Excel\Concerns\FromCollection;
+ class SiswaExport implements FromCollection, WithHeadings
+ {
+     public function collection()
+     {
+         return Siswa::all();
+     }
  
-class SiswaExport implements FromCollection
-{
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
-    {
-        return Siswa::all();
-    }
-}
+     public function headings(): array
+     {
+         return [
+             'ID',
+             'Nama',
+             'NIS',
+             'Alamat',
+         ];
+     }
+ }
+ 
