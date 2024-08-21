@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>BISMILLAH BISA HEHE</title>
+    <title>TES</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- Sertakan file JavaScript Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -10,6 +10,8 @@
 </head>
 
 <body>
+        <div class="p-3 mb-2 bg-primary text-white">
+
     <div class="p-3 mb-2 bg-primary text-white">
 
         <div class="container">
@@ -128,7 +130,7 @@
                                 <center>{{$s->alamat}}
                             </td>
                             <td>
-                                <div class="d-flex justify-co   ntent-between" style="gap: 10px;">
+                                <div class="d-flex justify-content-between" style="gap: 10px;">
                                     <!-- Edit button on the left -->
                                     <a class="btn btn-info mr-3" href="{{ route('siswa.edit', $s->id) }}">Edit</a>
 

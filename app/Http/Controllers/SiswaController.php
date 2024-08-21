@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Siswa;
+use App\Models\Siswa as S;
 use App\Exports\SiswaExport;
 use App\Imports\SiswaImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class SiswaController extends Controller
 {
@@ -21,10 +22,10 @@ class SiswaController extends Controller
         if ($request->has('export')) {
             return $this->export();
         }
-        $siswa = Siswa::all();
+        $siswa = S::all();
         return view('siswa', compact('siswa'));
     }
-    
+
     private function export()
     {
         return Excel::download(new SiswaExport, 'siswa.xlsx');
@@ -42,17 +43,15 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        // Check if the request has a file for import
         if ($request->hasFile('file')) {
             $request->validate([
                 'file' => 'required|mimes:xlsx,csv',
             ]);
 
             try {
-                // Store the uploaded file
                 $filePath = $request->file('file')->store('imports');
 
-                // Import the file
+                // Impor file
                 Excel::import(new SiswaImport, storage_path('app/' . $filePath));
 
                 return redirect()->route('siswa.index')->with('success', 'Import successful!');
@@ -60,22 +59,37 @@ class SiswaController extends Controller
                 return redirect()->route('siswa.index')->with('error', 'Terjadi kesalahan saat mengimpor data.');
             }
         } else {
-            // Handle regular form submission
             $request->validate([
                 'nama' => 'required|string|max:255',
                 'nis' => 'required|digits_between:3,10',
                 'alamat' => 'required|string',
+                'mode' => 'required|in:ADD,UPDATE', 
             ]);
 
-            // Simpan data ke database
-            try {
-                Siswa::create([
-                    'nama' => $request->input('nama'),
-                    'nis' => $request->input('nis'),
-                    'alamat' => $request->input('alamat'),
-                ]);
+            $id = $request->input('id');
+            $mode = $request->input('mode');
+            $nama = $request->input('nama');
+            $nis = $request->input('nis');
+            $alamat = $request->input('alamat');
 
-                return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil ditambahkan!');
+            try {
+                if ($mode == 'ADD') {
+                    S::create([
+                        'nama' => $nama,
+                        'nis' => $nis,
+                        'alamat' => $alamat,
+                    ]);
+                    $message = 'Data siswa berhasil ditambahkan!';
+                } elseif ($mode == 'UPDATE') {
+                    S::where('id', $id)->update([
+                        'nama' => $nama,
+                        'nis' => $nis,
+                        'alamat' => $alamat,
+                    ]);
+                    $message = 'Data siswa berhasil diperbarui!';
+                }
+
+                return redirect()->route('siswa.index')->with('success', $message);
             } catch (\Exception $e) {
                 return redirect()->route('siswa.index')->with('error', 'Terjadi kesalahan saat menyimpan data siswa.');
             }
@@ -89,7 +103,7 @@ class SiswaController extends Controller
     public function show(string $id)
     {
 
-        $siswa = Siswa::find($id);
+        $siswa = S::find($id);
 
         return View::make('show')
             ->with('siswa', $siswa);
@@ -100,25 +114,16 @@ class SiswaController extends Controller
      */
     public function edit(string $id)
     {
-        $siswa = Siswa::findOrFail($id);
+        $siswa = S::findOrFail($id);
         return view('edit_siswa', compact('siswa'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update()
     {
-        $request->validate([
-            'nama' => 'required|string',
-            'nis' => 'required|integer',
-            'alamat' => 'required|string',
-        ]);
-
-        $siswa = Siswa::findOrFail($id);
-        $siswa->update($request->all());
-
-        return redirect()->route('siswa.index')->with('success', 'Data Siswa Berhasil di update');
+       
     }
 
     /**
@@ -128,8 +133,8 @@ class SiswaController extends Controller
     public function destroy($id)
     {
         try {
-            $siswa = Siswa::findOrFail($id);
-            $siswa->delete();  // Ini akan menghapus data secara permanen
+            $siswa = S::findOrFail($id);
+            $siswa->delete();  
 
             return redirect()->route('siswa.index')->with('success', 'Siswa berhasil dihapus secara permanen.');
         } catch (ModelNotFoundException $e) {
