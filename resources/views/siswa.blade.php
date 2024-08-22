@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- Sertakan file JavaScript Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
@@ -46,7 +47,21 @@
                     </div>
                 </div>
             </nav>
-
+            <br>
+            <div class="container-md">
+            <form action="{{ route('siswa.index') }}" method="GET" class="d-flex flex-column align-items-start mb-4">
+                <div class="input-group mb-2">
+                    <select name="kolom" class="form-select">
+                        <option value="nama" {{ request('kolom') === 'nama' ? 'selected' : '' }}>Nama</option>
+                        <option value="nis" {{ request('kolom') === 'nis' ? 'selected' : '' }}>NIS</option>
+                        <option value="alamat" {{ request('kolom') === 'alamat' ? 'selected' : '' }}>Alamat</option>
+                    </select>
+                    <input type="text" name="cari" class="form-control" placeholder="Cari.." value="{{ request('cari') }}">
+                    <button type="submit" class="btn btn-secondary">Cari</button>
+                </div>
+            </form>
+            </div>
+                       
 
             <div class="container mt-4">
                 <center>
@@ -89,7 +104,6 @@
                                     <button type="submit" class="btn btn-success">Import</button>
                                 </div>
                             </div>
-                        </form>
                     </div>
                 </div>
 
@@ -146,6 +160,8 @@
                         @endforeach
                     </tbody>
                 </table>
+                <br>
+
             </div>
 
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

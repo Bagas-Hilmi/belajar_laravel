@@ -1,14 +1,14 @@
 <?php
- 
- namespace App\Models;
- 
+
+namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Siswa extends Model
 {
     protected $table = "siswa";
-    
+
     protected $fillable = ['nama', 'nis', 'alamat'];
 
     static function get_dtSiswa()
@@ -23,7 +23,37 @@ class Siswa extends Model
         FROM siswa a
         ORDER BY a.nama ASC ');
 
-        return $db;                        
-    }    
-    
+        return $db;
+    }
+    public static function add($nama, $nis, $alamat)
+    {
+        try {
+            DB::table('siswa')->insert([
+                'nama' => $nama,
+                'nis' => $nis,
+                'alamat' => $alamat,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+            return ['success' => true, 'message' => 'Data siswa berhasil ditambahkan!'];
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => 'Terjadi kesalahan saat menambahkan data siswa.'];
+        }
+    }
+
+    public static function updateData($id, $nama, $nis, $alamat)
+    {
+        try {
+            DB::table('siswa')
+                ->where('id_siswa', $id)->update([
+                    'nama' => $nama,
+                    'nis' => $nis,
+                    'alamat' => $alamat,
+                    'updated_at' => now()
+                ]);
+            return ['success' => true, 'message' => 'Data siswa berhasil diperbarui!'];
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => 'Terjadi kesalahan saat memperbarui data siswa.'];
+        }
+    }
 }
