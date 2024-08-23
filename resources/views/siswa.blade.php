@@ -7,10 +7,12 @@
     <!-- Sertakan file JavaScript Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+
 
 </head>
 
-<body>
+<body> 
         <div class="p-3 mb-2 bg-primary text-white">
 
     <div class="p-3 mb-2 bg-primary text-white">
@@ -48,7 +50,6 @@
                 </div>
             </nav>
             <br>
-            <div class="container-md">
             <form action="{{ route('siswa.index') }}" method="GET" class="d-flex flex-column align-items-start mb-4">
                 <div class="input-group mb-2">
                     <select name="kolom" class="form-select">
@@ -60,7 +61,6 @@
                     <button type="submit" class="btn btn-secondary">Cari</button>
                 </div>
             </form>
-            </div>
                        
 
             <div class="container mt-4">
@@ -68,14 +68,12 @@
                     <h4>IHEHEHHEEHEHEH</h4>
                 </center>
 
-                {{-- notifikasi form validasi --}}
                 @if ($errors->has('file'))
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $errors->first('file') }}</strong>
                 </span>
                 @endif
 
-                {{-- notifikasi sukses --}}
                 @if ($sukses = Session::get('sukses'))
                 <div class="alert alert-success alert-block">
                     <button type="button" class="close" data-dismiss="alert">×</button>
@@ -83,30 +81,44 @@
                 </div>
                 @endif
 
-                <!-- Import Excel -->
-                <div class="modal fade" id="importExcel" tabindex="-1" aria-labelledby="importExcelLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <form method="post" action="{{ route('siswa.store') }}" enctype="multipart/form-data">
+                                @if(session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+
+                
+               <!-- Modal Import Excel -->
+                    <div class="modal fade" id="importExcel" tabindex="-1" aria-labelledby="importExcelLabel" aria-hidden="true">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="importExcelLabel">Import Excel</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    @csrf
-                                    <label>Pilih file Excel (.xlsx, .csv)</label>
-                                    <div class="form-group">
-                                        <input type="file" name="file" class="form-control" required>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success">Import</button>
+                                    <form action="{{ route('siswa.store') }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="mode" value="IMPORT">
+                                        <div class="mb-3">
+                                            <label for="file" class="form-label">Choose Excel File</label>
+                                            <input class="form-control" type="file" id="file" name="file" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Import</button>
+                                    </form>
                                 </div>
                             </div>
+                        </div>
                     </div>
-                </div>
 
+                    
                 <table class='table table-hover table-bordered'>
                     <thead>
                         <tr>
@@ -149,10 +161,10 @@
                                     <a class="btn btn-info mr-3" href="{{ route('siswa.edit', $s->id) }}">Edit</a>
 
                                     <!-- Delete button on the right -->
-                                    <form action="{{ route('siswa.destroy', $s->id) }}" method="POST" class="d-inline">
+                                    <form id="delete-form-{{ $s->id }}" action="{{ route('siswa.destroy', $s->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $s->id }})">Delete</button>
                                     </form>
                                 </div>
                             </td>
@@ -161,12 +173,17 @@
                     </tbody>
                 </table>
                 <br>
-
             </div>
+            <div class="mt-4">
+                {{ $siswa->links() }}
+            </div>
+            
 
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+            <script src="{{ asset('js/delete-confirmation.js') }}"></script>
         </div>
     </div>
 </body>

@@ -44,16 +44,22 @@ class Siswa extends Model
     public static function updateData($id, $nama, $nis, $alamat)
     {
         try {
-            DB::table('siswa')
-                ->where('id_siswa', $id)->update([
-                    'nama' => $nama,
-                    'nis' => $nis,
-                    'alamat' => $alamat,
-                    'updated_at' => now()
-                ]);
+            $query = 'UPDATE siswa
+                      SET nama = ?,
+                          nis = ?,
+                          alamat = ?,
+                          updated_at = ?
+                      WHERE id = ?';
+    
+            $params = [$nama, $nis, $alamat, now(), $id];
+    
+            DB::update($query, $params);
+    
             return ['success' => true, 'message' => 'Data siswa berhasil diperbarui!'];
         } catch (\Exception $e) {
             return ['success' => false, 'message' => 'Terjadi kesalahan saat memperbarui data siswa.'];
         }
     }
+    
 }
+    
