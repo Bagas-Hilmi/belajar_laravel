@@ -10,7 +10,7 @@ class Siswa extends Model
     protected $table = "siswa";
 
     protected $fillable = ['nama', 'nis', 'alamat'];
-
+        
     static function get_dtSiswa()
     {
         $db = DB::select('SELECT 
@@ -28,13 +28,9 @@ class Siswa extends Model
     public static function add($nama, $nis, $alamat)
     {
         try {
-            DB::table('siswa')->insert([
-                'nama' => $nama,
-                'nis' => $nis,
-                'alamat' => $alamat,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+                DB::insert('INSERT INTO siswa (nama, nis, alamat, created_at, updated_at) VALUES (?, ?, ?, ?, ?)', 
+                    [$nama, $nis, $alamat, now(), now()]);
+
             return ['success' => true, 'message' => 'Data siswa berhasil ditambahkan!'];
         } catch (\Exception $e) {
             return ['success' => false, 'message' => 'Terjadi kesalahan saat menambahkan data siswa.'];

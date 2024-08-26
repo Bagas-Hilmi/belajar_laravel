@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 
@@ -67,38 +67,36 @@ class SiswaController extends Controller
      {
          $mode = $request->input('mode');
      
-         // Jika ada file yang diunggah
          if ($request->hasFile('file')) {
-            // Validasi file
             $request->validate([
                 'file' => 'required|mimes:xlsx,csv',
             ]);
     
             try {
-                // Impor file
-                Excel::import(new SiswaImport, $request->file('file'));
-    
-                return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil diimpor!');
+                $file = $request->file('file');                
+                $nama_file = rand() . $file->getClientOriginalName();
+                $file->move(public_path('file_siswa'), $nama_file);
+                Excel::import(new SiswaImport, public_path('file_siswa/' . $nama_file));
+                return redirect()->route('siswa.index')->with('success', "Data siswa berhasil diimpor!");
+
             } catch (\Exception $e) {
+                Log::error('Import error: ' . $e->getMessage());
                 return redirect()->route('siswa.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
             }
          } else {
-             // Jika tidak ada file, lanjutkan dengan logika ADD/UPDATE
              try {
                  $result = match ($mode) {
                      'ADD' => S::add($request->input('nama'), $request->input('nis'), $request->input('alamat')),
                      'UPDATE' => S::updateData($request->input('id'), $request->input('nama'), $request->input('nis'), $request->input('alamat')),
                      default => throw new \Exception('Mode tidak valid'),
                  };
-     
-                 // Cek hasil operasi dan redirect dengan pesan
+
                  if ($result['success']) {
                      return redirect()->route('siswa.index')->with('success', $result['message']);
                  } else {
                      return redirect()->route('siswa.index')->with('error', $result['message']);
                  }
              } catch (\Exception $e) {
-                 // Pesan error jika terjadi kesalahan
                  return redirect()->route('siswa.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
              }
          }

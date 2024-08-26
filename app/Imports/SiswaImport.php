@@ -7,20 +7,22 @@ use Maatwebsite\Excel\Concerns\ToModel;
 
 class SiswaImport implements ToModel
 {
-
     /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
+    * @param array $row
+    *
+    * @return \Illuminate\Database\Eloquent\Model|null
+    */
     public function model(array $row)
     {
-        return Siswa::updateOrCreate(
-            [
-                'nama' => $row[1],
-                'nis' => $row[2],
-                'alamat' => $row[3],
-            ]
-        );
+        return new Siswa([
+            'nama' => $row[1],
+            'nis' => $row[2], 
+            'alamat' => $row[3], 
+        ]);
     }
+    public function chunkSize(): int
+    {
+        return 1000; // ukuran batch
+    }
+    
 }

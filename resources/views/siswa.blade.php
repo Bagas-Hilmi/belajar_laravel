@@ -53,9 +53,9 @@
             <form action="{{ route('siswa.index') }}" method="GET" class="d-flex flex-column align-items-start mb-4">
                 <div class="input-group mb-2">
                     <select name="kolom" class="form-select">
-                        <option value="nama" {{ request('kolom') === 'nama' ? 'selected' : '' }}>Nama</option>
-                        <option value="nis" {{ request('kolom') === 'nis' ? 'selected' : '' }}>NIS</option>
-                        <option value="alamat" {{ request('kolom') === 'alamat' ? 'selected' : '' }}>Alamat</option>
+                        <option value="nama" style="background-color: yellow" {{ request('kolom') === 'nama' ? 'selected' : '' }}>Nama</option>
+                        <option value="nis" style="background-color: yellow" {{ request('kolom') === 'nis' ? 'selected' : '' }}>NIS</option>
+                        <option value="alamat" style="background-color: yellow" request('kolom') === 'alamat' ? 'selected' : '' }}>Alamat</option>
                     </select>
                     <input type="text" name="cari" class="form-control" placeholder="Cari.." value="{{ request('cari') }}">
                     <button type="submit" class="btn btn-secondary">Cari</button>
@@ -65,7 +65,7 @@
 
             <div class="container mt-4">
                 <center>
-                    <h4>IHEHEHHEEHEHEH</h4>
+                    <h4>HAAAALLOOOoooOOO</h4>
                 </center>
 
                 @if ($errors->has('file'))
@@ -97,7 +97,7 @@
                 
                <!-- Modal Import Excel -->
                     <div class="modal fade" id="importExcel" tabindex="-1" aria-labelledby="importExcelLabel" aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="importExcelLabel">Import Excel</h5>
@@ -106,12 +106,14 @@
                                 <div class="modal-body">
                                     <form action="{{ route('siswa.store') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
-                                        <input type="hidden" name="mode" value="IMPORT">
+                                        <label>Pilih file excel</label>
+
                                         <div class="mb-3">
-                                            <label for="file" class="form-label">Choose Excel File</label>
-                                            <input class="form-control" type="file" id="file" name="file" required>
+                                            <input class="form-control" type="file" id="file" name="file" required="required">
                                         </div>
+                                        <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Import</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -181,7 +183,7 @@
 
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
             <script src="{{ asset('js/delete-confirmation.js') }}"></script>
         </div>
