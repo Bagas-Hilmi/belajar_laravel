@@ -1,16 +1,14 @@
 function confirmDelete(id) {
-    swal({
+    Swal.fire({
         title: "Apakah Anda yakin?",
         text: "Data siswa ini akan dihapus secara permanen!",
-        type: "warning",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonClass: "btn-danger",
         confirmButtonText: "Ya, hapus!",
         cancelButtonText: "Batal",
-        closeOnConfirm: false
-    },
-    function(isConfirm){
-        if (isConfirm) {
+        dangerMode: true,
+    }).then((result) => {
+        if (result.isConfirmed) {
             document.getElementById('delete-form-' + id).submit();
         }
     });

@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\Facades\DataTables;
+
 
 
 class SiswaController extends Controller
@@ -25,21 +27,44 @@ class SiswaController extends Controller
     {
         if ($request->has('export')) {
             return $this->export();
-            
         }
-
         $query = S::query();
 
         if ($request->filled('cari') && $request->filled('kolom')) {
             $kolom = $request->input('kolom');
             $cari = $request->input('cari');
             $query->where($kolom, 'like', "%{$cari}%");
-            
         }
 
+        if (request()->ajax()) {
+            $siswa = S::query();
+
+            return DataTables::of($siswa)
+                ->addColumn('action', function ($row) {
+                    $editUrl = route('siswa.edit', $row->id);
+                    $deleteUrl = route('siswa.destroy', $row->id);
+                    return '
+                            <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editModal" 
+                            data-id="{{ $row->id }}" 
+                            data-nama="{{ $row->nama }}" 
+                            data-nis="{{ $row->nis }}" 
+                            data-alamat="{{ $row->alamat }}">
+                            Edit
+                            </a>                        
+                    <button class="btn btn-sm btn-danger" onclick="confirmDelete(' . $row->id . ')">Delete</button>
+                    <form id="delete-form-' . $row->id . '" action="' . $deleteUrl . '" method="POST" style="display:none;">
+                        ' . method_field('DELETE') . '
+                        ' . csrf_field() . '
+                    </form>
+                ';
+                })
+
+                ->rawColumns(['action'])  // Untuk memberitahu DataTables agar tidak meng-escape kolom ini
+                ->make(true);
+        }
         $siswa = $query->paginate(20);
 
-        return view('siswa', compact('siswa'));
+        return view('home');
     }
 
 
@@ -63,45 +88,60 @@ class SiswaController extends Controller
      */
 
 
-     public function store(Request $request)
-     {
-         $mode = $request->input('mode');
-     
-         if ($request->hasFile('file')) {
+    public function store(Request $request)
+    {
+        if ($request->hasFile('file')) {
             $request->validate([
                 'file' => 'required|mimes:xlsx,csv',
             ]);
-    
+
             try {
-                $file = $request->file('file');                
+                $file = $request->file('file');
                 $nama_file = rand() . $file->getClientOriginalName();
                 $file->move(public_path('file_siswa'), $nama_file);
+
                 Excel::import(new SiswaImport, public_path('file_siswa/' . $nama_file));
                 return redirect()->route('siswa.index')->with('success', "Data siswa berhasil diimpor!");
-
             } catch (\Exception $e) {
                 Log::error('Import error: ' . $e->getMessage());
                 return redirect()->route('siswa.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
             }
-         } else {
-             try {
-                 $result = match ($mode) {
-                     'ADD' => S::add($request->input('nama'), $request->input('nis'), $request->input('alamat')),
-                     'UPDATE' => S::updateData($request->input('id'), $request->input('nama'), $request->input('nis'), $request->input('alamat')),
-                     default => throw new \Exception('Mode tidak valid'),
-                 };
+        }
 
-                 if ($result['success']) {
-                     return redirect()->route('siswa.index')->with('success', $result['message']);
-                 } else {
-                     return redirect()->route('siswa.index')->with('error', $result['message']);
-                 }
-             } catch (\Exception $e) {
-                 return redirect()->route('siswa.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-             }
-         }
-     }
-     
+        if ($request->ajax()) {
+            $mode = $request->input('mode');
+            
+            // Validasi data
+            $validated = $request->validate([
+                'nama' => 'required|string|max:255',
+                'nis' => 'required|string|max:20|unique:siswa,nis,' . $request->input('id'),
+                'alamat' => 'required|string',
+            ]);
+    
+            try {
+                // Operasi berdasarkan mode
+                $result = match ($mode) {
+                    'ADD' => S::add($request->input('nama'), $request->input('nis'), $request->input('alamat')),
+                    'UPDATE' => S::updateData($request->input('id'), $request->input('nama'), $request->input('nis'), $request->input('alamat')),
+                    default => throw new \Exception('Mode tidak valid'),
+                };
+    
+                return response()->json([
+                    'success' => $result['success'],
+                    'message' => $result['message']
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Kesalahan saat memproses data siswa: ' . $e->getMessage());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan internal. Silakan coba lagi nanti.'
+                ], 500);
+            }
+        }
+    
+        return redirect()->route('siswa.index')->with('error', 'Permintaan tidak valid.');
+    }
+
 
     /**
      * Display the specified resource.

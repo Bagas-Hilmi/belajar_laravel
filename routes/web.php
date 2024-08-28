@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\SiswaController;
 
-Route::resource('siswa', App\Http\Controllers\SiswaController::class);
+Route::get('/', [SiswaController::class, 'index']);
+
+Route::resource('siswa', SiswaController::class);
+
 
 
 
