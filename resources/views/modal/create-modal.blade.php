@@ -1,32 +1,33 @@
-<div class="modal fade" id="createSiswaModal" tabindex="-1" aria-labelledby="createSiswaModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal Tambah Data -->
+<div class="modal fade" id="tambahDataModal" tabindex="-1" role="dialog" aria-labelledby="tambahDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createSiswaModalLabel">Create New Siswa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="tambahDataModalLabel">Tambah Data</h5>
             </div>
             <div class="modal-body">
-                <form id="siswabuatForm" action="{{ route('siswa.store') }}" method="POST">
+                <form id="tambahDataForm" action="{{ route('siswa.store') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="mode" value="ADD">
-                    <div class="mb-2">
-                        <label for="nama" class="form-label">Nama:</label>
-                        <input type="text" id="nama" name="nama" class="form-control" required>
+                    <!-- Tambahkan field formulir sesuai kebutuhan -->
+                    <div class="form-group">
+                        <label for="nama">Nama</label>
+                        <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>
-                    <div class="mb-2">
-                        <label for="nis" class="form-label">NIS:</label>
-                        <input type="number" id="nis" name="nis" class="form-control" required>
+                    <div class="form-group">
+                        <label for="nis">NIS</label>
+                        <input type="number" class="form-control" id="nis" name="nis" required>
                     </div>
-                    <div class="mb-2">
-                        <label for="alamat" class="form-label">Alamat:</label>
-                        <textarea id="alamat" name="alamat" class="form-control" required></textarea>
+                    <div class="form-group">
+                        <label for="alamat">Alamat</label>
+                        <textarea class="form-control" id="alamat" name="alamat" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="submitSiswa">Tambah Siswa</button>
             </div>
         </div>
     </div>
 </div>
+

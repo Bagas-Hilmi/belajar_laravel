@@ -1,54 +1,42 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('submitSiswa').addEventListener('click', function(e) {
+    document.getElementById('tambahDataForm').addEventListener('submit', function(e) {
         e.preventDefault(); 
 
         Swal.fire({
             title: "Konfirmasi",
-            text: "Apakah Anda yakin ingin menambah siswa ini?",
+            text: "Apakah Anda yakin ingin menambahkan data ini?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, tambahkan!'
+            confirmButtonText: "Ya, tambah!",
+            cancelButtonText: "Batal",
+            dangerMode: true,
         }).then((result) => {
             if (result.isConfirmed) {
-                var form = document.getElementById('siswabuatForm');
-                var formData = new FormData(form);
-
-                fetch(form.action, {
+                // Mengambil data formulir
+                var formData = new FormData(this);
+                formData.append('mode', 'ADD'); 
+                // Mengirimkan permintaan AJAX
+                fetch(this.action, {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Accept': 'application/json'
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': formData.get('_token') 
                     }
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        Swal.fire(
-                            'Berhasil!',
-                            'Data siswa berhasil ditambahkan.',
-                            'success'
-                        );
-                        $('#createSiswaModal').modal('hide');
-                        form.reset();
-                        $('#tbl_list').DataTable().ajax.reload();
+                        Swal.fire('Sukses!', data.message, 'success');
+                        $('#tambahDataModal').modal('hide');
+                        // Refresh data table atau lakukan aksi lain jika perlu
+                        $('#tbl_list').DataTable().ajax.reload(); // Pastikan ini sesuai dengan id tabel datamu
                     } else {
-                        Swal.fire(
-                            'Error!',
-                            data.message || 'Terjadi kesalahan saat menambahkan data.',
-                            'error'
-                        );
+                        Swal.fire('Gagal!', data.message, 'error');
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire(
-                        'Error!',
-                        'Terjadi kesalahan saat menambahkan data.',
-                        'error'
-                    );
+                    Swal.fire('Gagal!', 'Terjadi kesalahan saat mengirim data.', 'error');
                 });
             }
         });

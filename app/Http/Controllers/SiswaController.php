@@ -37,29 +37,19 @@ class SiswaController extends Controller
         }
 
         if (request()->ajax()) {
-            $siswa = S::query();
-
+            $siswa = S::select('id', 'nama', 'nis', 'alamat');
             return DataTables::of($siswa)
-                ->addColumn('action', function ($row) {
-                    $editUrl = route('siswa.edit', $row->id);
-                    $deleteUrl = route('siswa.destroy', $row->id);
-                    return '
-                            <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editModal" 
-                            data-id="{{ $row->id }}" 
-                            data-nama="{{ $row->nama }}" 
-                            data-nis="{{ $row->nis }}" 
-                            data-alamat="{{ $row->alamat }}">
-                            Edit
-                            </a>                        
-                    <button class="btn btn-sm btn-danger" onclick="confirmDelete(' . $row->id . ')">Delete</button>
-                    <form id="delete-form-' . $row->id . '" action="' . $deleteUrl . '" method="POST" style="display:none;">
-                        ' . method_field('DELETE') . '
-                        ' . csrf_field() . '
-                    </form>
-                ';
+                ->addIndexColumn()
+                ->addColumn('action', function ($siswa) {
+                    $btn = '<a href="javascript:void(0)" class="edit btn btn-info btn-sm">Edit</a>';
+                    $btn .= '<a href="javascript:void(0)" onclick="confirmDelete(' . $siswa->id . ')" class="delete btn btn-danger btn-sm ml-2">Delete</a>';
+                    $btn .= '<form id="delete-form-' . $siswa->id . '" action="' . route('siswa.destroy', $siswa->id) . '" method="POST" style="display: none;">
+                                        ' . csrf_field() . '
+                                        ' . method_field('DELETE') . '
+                                     </form>';
+                    return $btn;
                 })
-
-                ->rawColumns(['action'])  // Untuk memberitahu DataTables agar tidak meng-escape kolom ini
+                ->rawColumns(['action'])
                 ->make(true);
         }
         $siswa = $query->paginate(20);
@@ -108,38 +98,36 @@ class SiswaController extends Controller
             }
         }
 
-        if ($request->ajax()) {
-            $mode = $request->input('mode');
-            
-            // Validasi data
-            $validated = $request->validate([
-                'nama' => 'required|string|max:255',
-                'nis' => 'required|string|max:20|unique:siswa,nis,' . $request->input('id'),
-                'alamat' => 'required|string',
-            ]);
-    
-            try {
-                // Operasi berdasarkan mode
-                $result = match ($mode) {
-                    'ADD' => S::add($request->input('nama'), $request->input('nis'), $request->input('alamat')),
-                    'UPDATE' => S::updateData($request->input('id'), $request->input('nama'), $request->input('nis'), $request->input('alamat')),
-                    default => throw new \Exception('Mode tidak valid'),
-                };
-    
-                return response()->json([
-                    'success' => $result['success'],
-                    'message' => $result['message']
-                ]);
-            } catch (\Exception $e) {
-                Log::error('Kesalahan saat memproses data siswa: ' . $e->getMessage());
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Terjadi kesalahan internal. Silakan coba lagi nanti.'
-                ], 500);
-            }
+        $mode = $request->input('mode');
+
+        try {
+            $result = match ($mode) {
+                'ADD' => S::add(
+                    $request->input('nama'),
+                    $request->input('nis'),
+                    $request->input('alamat')
+                ),
+                'UPDATE' => S::updateData(
+                    $request->input('id'),
+                    $request->input('nama'),
+                    $request->input('nis'),
+                    $request->input('alamat')
+                ),
+                default => throw new \InvalidArgumentException('Mode tidak valid'),
+            };
+
+            return response()->json($result);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
-    
-        return redirect()->route('siswa.index')->with('error', 'Permintaan tidak valid.');
     }
 
 
@@ -161,7 +149,7 @@ class SiswaController extends Controller
     public function edit(string $id)
     {
         $siswa = S::findOrFail($id);
-        return view('edit_siswa', compact('siswa'));
+        return response()->json($siswa);
     }
 
     /**
@@ -175,15 +163,12 @@ class SiswaController extends Controller
 
     public function destroy($id)
     {
-        try {
-            $siswa = S::findOrFail($id);
+        $siswa = S::find($id);
+        if ($siswa) {
             $siswa->delete();
-
-            return redirect()->route('siswa.index')->with('success', 'Siswa berhasil dihapus secara permanen.');
-        } catch (ModelNotFoundException $e) {
-            return redirect()->route('siswa.index')->with('error', 'Siswa tidak ditemukan.');
-        } catch (\Exception $e) {
-            return redirect()->route('siswa.index')->with('error', 'Terjadi kesalahan saat menghapus siswa.');
+            return response()->json(['success' => 'Data berhasil dihapus.']);
         }
+
+        return response()->json(['error' => 'Data tidak ditemukan.'], 404);
     }
 }
