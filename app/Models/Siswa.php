@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+
 
 class Siswa extends Model
 {
@@ -49,13 +51,13 @@ class Siswa extends Model
     
             $params = [$nama, $nis, $alamat, now(), $id];
     
-            DB::update($query, $params);
-    
+            $result = DB::update($query, $params);
+            Log::info('Update berhasil untuk ID: ' . $id);
+
             return ['success' => true, 'message' => 'Data siswa berhasil diperbarui!'];
         } catch (\Exception $e) {
+            Log::error('Gagal memperbarui data siswa: ' . $e->getMessage());
             return ['success' => false, 'message' => 'Terjadi kesalahan saat memperbarui data siswa.'];
         }
     }
-    
-}
-    
+} 

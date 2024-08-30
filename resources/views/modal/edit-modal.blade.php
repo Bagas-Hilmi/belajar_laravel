@@ -1,32 +1,35 @@
-<!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Edit Siswa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </button>
             </div>
             <div class="modal-body">
-                <form id="editForm" action="{{ route('siswa.store') }}" method="POST">
+                <form id="editForm" action="{{ route('siswa.store') }}" method="POST"> 
                     @csrf
-                    <input type="hidden" name="mode" value="UPDATE">
-                    <input type="hidden" name="id" id="modalId">
-                    <div class="mb-3">
-                        <label for="modalName" class="form-label">Nama:</label>
-                        <input type="text" id="modalName" name="nama" class="form-control" required>
+                    @method('PUT')
+                    <input type="hidden" name="id" id="edit_id">
+                    <div class="form-group">
+                        <label for="nama">Nama </label>
+                        <input type="text" name="nama" id="edit_nama" class="form-control" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="modalNis" class="form-label">NIS:</label>
-                        <input type="number" id="modalNis" name="nis" class="form-control" required>
+
+                    <div class="form-group">
+                        <label for="nis">NIS</label>
+                        <input type="number" name="nis" id="edit_nis" class="form-control" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="modalAlamat" class="form-label">Alamat:</label>
-                        <textarea id="modalAlamat" name="alamat" class="form-control" rows="3" required></textarea>
+
+                    <div class="form-group">
+                        <label for="alamat">Alamat </label>
+                        <input type="text" name="alamat" id="edit_alamat" class="form-control" required  >
                     </div>
-                    <button type="submit" class="btn btn-primary">Perbarui Siswa</button>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-

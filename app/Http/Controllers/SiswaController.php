@@ -41,8 +41,8 @@ class SiswaController extends Controller
             return DataTables::of($siswa)
                 ->addIndexColumn()
                 ->addColumn('action', function ($siswa) {
-                    $btn = '<a href="javascript:void(0)" class="edit btn btn-info btn-sm">Edit</a>';
-                    $btn .= '<a href="javascript:void(0)" onclick="confirmDelete(' . $siswa->id . ')" class="delete btn btn-danger btn-sm ml-2">Delete</a>';
+                    $btn = '<button onclick="openEditModal('.$siswa->id.', \''.$siswa->nama.'\', \''.$siswa->nis.'\', \''.$siswa->alamat.'\')" class="edit btn btn-info btn-sm">Edit</button>';
+                    $btn .= '<a href="javascript:void(0)" onclick="confirmDelete(' . $siswa->id . ')" class="delete btn btn-danger btn-sm ms-2">Delete</a>';
                     $btn .= '<form id="delete-form-' . $siswa->id . '" action="' . route('siswa.destroy', $siswa->id) . '" method="POST" style="display: none;">
                                         ' . csrf_field() . '
                                         ' . method_field('DELETE') . '
@@ -54,7 +54,7 @@ class SiswaController extends Controller
         }
         $siswa = $query->paginate(20);
 
-        return view('home');
+        return view('home' , compact('siswa'));
     }
 
 
@@ -80,6 +80,7 @@ class SiswaController extends Controller
 
     public function store(Request $request)
     {
+
         if ($request->hasFile('file')) {
             $request->validate([
                 'file' => 'required|mimes:xlsx,csv',
@@ -99,7 +100,7 @@ class SiswaController extends Controller
         }
 
         $mode = $request->input('mode');
-
+        
         try {
             $result = match ($mode) {
                 'ADD' => S::add(
@@ -146,11 +147,13 @@ class SiswaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $siswa = S::findOrFail($id);
-        return response()->json($siswa);
+        $siswa = S::findOrFail($id); 
+        return response()->json($siswa); // Kembalikan data siswa dalam format JSON
     }
+
+
 
     /**
      * Update the specified resource in storage.
