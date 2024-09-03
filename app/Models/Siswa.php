@@ -56,7 +56,6 @@ class Siswa extends Model
 
             return ['success' => true, 'message' => 'Data siswa berhasil diperbarui!'];
         } catch (\Exception $e) {
-            Log::error('Gagal memperbarui data siswa: ' . $e->getMessage());
             return ['success' => false, 'message' => 'Terjadi kesalahan saat memperbarui data siswa.'];
         }
     }

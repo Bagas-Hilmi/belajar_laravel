@@ -51,8 +51,5 @@
     </div>
 
     @stack('scripts')
-    <!-- Scripts di sini untuk halaman tertentu -->
-    @stack('scripts')
-
 </body>
 </html>

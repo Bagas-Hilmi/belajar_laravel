@@ -9,7 +9,6 @@ use App\Imports\SiswaImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -28,14 +27,7 @@ class SiswaController extends Controller
         if ($request->has('export')) {
             return $this->export();
         }
-        $query = S::query();
-
-        if ($request->filled('cari') && $request->filled('kolom')) {
-            $kolom = $request->input('kolom');
-            $cari = $request->input('cari');
-            $query->where($kolom, 'like', "%{$cari}%");
-        }
-
+        
         if (request()->ajax()) {
             $siswa = S::select('id', 'nama', 'nis', 'alamat');
             return DataTables::of($siswa)
@@ -52,9 +44,7 @@ class SiswaController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        $siswa = $query->paginate(20);
-
-        return view('home' , compact('siswa'));
+        return view('home');
     }
 
 
@@ -92,16 +82,15 @@ class SiswaController extends Controller
                 $file->move(public_path('file_siswa'), $nama_file);
 
                 Excel::import(new SiswaImport, public_path('file_siswa/' . $nama_file));
-                return redirect()->route('siswa.index')->with('success', "Data siswa berhasil diimpor!");
+                return response()->json(['success' => true, 'message' => "Data siswa berhasil diimpor!"]);
             } catch (\Exception $e) {
                 Log::error('Import error: ' . $e->getMessage());
-                return redirect()->route('siswa.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+                return response()->json(['success' => false, 'message' => 'Terjadi Kesalahan saat mengimpor data    !' . $e->getMessage()], 500);
             }
         }
 
         $mode = $request->input('mode');
         
-        try {
             $result = match ($mode) {
                 'ADD' => S::add(
                     $request->input('nama'),
@@ -118,17 +107,7 @@ class SiswaController extends Controller
             };
 
             return response()->json($result);
-        } catch (\InvalidArgumentException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
-        }
+       
     }
 
 

@@ -15,27 +15,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Mengambil data formulir
                 var formData = new FormData(this);
                 formData.append('mode', 'ADD'); 
+
+                // Mengambil token CSRF dari meta tag atau hidden input
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
                 // Mengirimkan permintaan AJAX
                 fetch(this.action, {
                     method: 'POST',
                     body: formData,
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': formData.get('_token') 
+                        'X-CSRF-TOKEN': csrfToken
                     }
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         Swal.fire('Sukses!', data.message, 'success');
-                        $('#tambahDataModal').modal('hide');
-                        // Refresh data table atau lakukan aksi lain jika perlu
+
+                        // Menyembunyikan modal menggunakan JavaScript murni
+                        const tambahDataModal = document.getElementById('tambahDataModal');
+                        const bootstrapModal = bootstrap.Modal.getInstance(tambahDataModal);
+                        bootstrapModal.hide();
+
+                        // Refresh tabel data
                         $('#tbl_list').DataTable().ajax.reload(); // Pastikan ini sesuai dengan id tabel datamu
                     } else {
                         Swal.fire('Gagal!', data.message, 'error');
                     }
                 })
                 .catch(error => {
+                    console.error('Error:', error);
                     Swal.fire('Gagal!', 'Terjadi kesalahan saat mengirim data.', 'error');
                 });
             }
